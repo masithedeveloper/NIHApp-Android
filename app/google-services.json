@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "140672342143",
+    "firebase_url": "https://nihapp-33a56.firebaseio.com",
+    "project_id": "nihapp-33a56",
+    "storage_bucket": "nihapp-33a56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140672342143:android:74430d9739f6d7f0",
+        "android_client_info": {
+          "package_name": "za.co.android.nihapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "140672342143-p7rv8bujfn77umeu41a254d3jdj8dbgi.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "140672342143-p7rv8bujfn77umeu41a254d3jdj8dbgi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHBpP0uYCiVLRvSD2mDG-QWEJpLRgr8Fc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
