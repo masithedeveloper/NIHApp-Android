@@ -8,6 +8,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
+
     <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <!-- Used for the buttons -->
         <item name="colorAccent">@color/colorAccent</item>
@@ -16,10 +17,19 @@
         <!-- Used for the background -->
         <item name="android:background">@color/colorPrimaryDark</item>
     </style>
-    <style name="MyActionBar.MenuTextStyle"
-        parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+
+    <style name="MyActionBar.MenuTextStyle" parent="android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">#F0F</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">24dip</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

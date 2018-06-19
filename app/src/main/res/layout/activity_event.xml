@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activities.EventActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- list of parent -->
+        <Spinner
+            android:layout_marginBottom="25dp"
+            android:id="@+id/list_of_parents_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></Spinner>
+        <!-- event type -->
+        <RadioGroup
+            android:layout_marginBottom="25dp"
+            android:orientation="horizontal"
+            android:id="@+id/event_type_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pick Up"
+                android:id="@+id/pick_up_radio"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Drop Off"
+                android:id="@+id/drop_off_radio"/>
+
+        </RadioGroup>
+
+        <!-- where -->
+        <Switch
+            android:layout_marginBottom="25dp"
+            android:text="From home?"
+            android:id="@+id/from_home_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ProgressBar
+            android:layout_above="@+id/send_event_button"
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleSmallInverse"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- send button -->
+    <Button
+        style="@style/Base.Widget.AppCompat.Button.Colored"
+        android:id="@+id/send_event_button"
+        android:text="Send Event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        />
+</RelativeLayout>
+
+
+

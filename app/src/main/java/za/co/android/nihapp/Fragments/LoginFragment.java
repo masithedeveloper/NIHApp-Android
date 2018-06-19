@@ -1,11 +1,12 @@
 package za.co.android.nihapp.Fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -25,7 +27,10 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
 
+import za.co.android.nihapp.Activities.EventActivity;
 import za.co.android.nihapp.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -63,9 +68,14 @@ public class LoginFragment extends Fragment {
         mPasswordView = getView().findViewById(R.id.password);
         mProgressBar = getView().findViewById(R.id.progressBar1);
 
+        String DeviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        SharedPreferences.Editor e = sharedPreferences.edit();
+        e.putString("DeviceId", DeviceId);
+        e.commit();
+
         Button mEmailSignInButton = getView().findViewById(R.id.email_sign_in_button);
         if(sharedPreferences.contains("username")) {
-            //startActivity(new Intent(getActivity(), MainActivity.class)); // landing screen
+            startActivity(new Intent(getActivity(), EventActivity.class)); // landing screen
             getActivity().finish();
         }
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +105,6 @@ public class LoginFragment extends Fragment {
                     focusView.requestFocus();
                 } else {
                     userLogin(username,password);
-
                 }
             }
         });
@@ -123,15 +132,15 @@ public class LoginFragment extends Fragment {
                         e.putString("EmailAddress", EmailAddress);
                         e.putString("Password", Password);
                         e.putString("SessionKey", response.get("SessionKey").toString()); // things is important
-                        e.putString("PersonId", response.get("PersonId").toString());
+                        e.putLong("PersonId", response.getLong("PersonId"));
                         e.commit();
 
                         Toast.makeText(getActivity(),"LogIn Successful",Toast.LENGTH_LONG).show();
                         // Navigate to the main screen
-                        //Intent intent = new Intent(getActivity(), MainActivity.class);
-                        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        //startActivity(intent);
+                        Intent intent = new Intent(getActivity(), EventActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                         getActivity().finish();
                     }else{
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.MyAlertDialogStyle);
@@ -159,7 +168,18 @@ public class LoginFragment extends Fragment {
                     dialog.show();
                 }
             //----------------------------------------------------------------------------------
-        });
+        })
+
+        {
+            /** Passing some request headers* */
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                HashMap<String,String> headers = new HashMap();
+                headers.put("Content-Type", "application/json");
+                headers.put("XClientId", Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID)); //
+                return headers;
+            }
+        };
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(jsonObjectRequest);

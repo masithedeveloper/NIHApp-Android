@@ -23,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -111,6 +112,9 @@ public class SignupFragment extends Fragment {
                         mProgressBar.setVisibility(View.GONE);
                         try {
                             if(response.getInt("PersonId") != 0) {
+                                SharedPreferences.Editor e = sharedPreferences.edit();
+                                e.putLong("PersonId", response.getLong("PersonId"));
+                                e.commit();
                                 Toast.makeText(getActivity(),"Registered Successful",Toast.LENGTH_LONG).show();
                                 // try navigating to login tab
                                 Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -118,6 +122,7 @@ public class SignupFragment extends Fragment {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 getActivity().finish();
+                                //FirebaseInstanceId.getInstance().getToken();
                             }else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.MyAlertDialogStyle);
                                 builder.setMessage(response.get("Desc").toString()) //temp

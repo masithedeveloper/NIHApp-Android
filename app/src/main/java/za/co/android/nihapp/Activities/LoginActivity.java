@@ -20,6 +20,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //getActionBar().hide();
         setContentView(R.layout.activity_login);
         mFragmentManager = getSupportFragmentManager();
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0358B2")));

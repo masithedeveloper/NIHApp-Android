@@ -5,10 +5,13 @@ package za.co.android.nihapp.app;
  */
 
 public class Config {
+//    public static final String BASE_URL = "http://10.0.92.134:8089/";
     public static final String BASE_URL = "http://192.168.68.1:8089/";
-    public static final String REGISTER_URL = BASE_URL + "api/Auth"; // juice found here PUT
-    public static final String LOGIN_URL = BASE_URL + "Api/Auth"; // juice is here POST
-    public static final String DRIVER_URL = "http://smartlbus.esy.es/getDriver.php?busno=";
+    public static final String REGISTER_URL = BASE_URL + "api/Auth";
+    public static final String LOGIN_URL = BASE_URL + "api/Auth";
+    public static final String DEVICE_URL = BASE_URL + "api/Device";
+    public static final String EVENT_URL = BASE_URL + "api/Event";
+    public static final String PARENT_URL = BASE_URL + "api/Person";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_PASSWORD = "password";
     public static final String DEST_LOCATION = ""; // school location

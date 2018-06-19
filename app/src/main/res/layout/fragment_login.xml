@@ -2,10 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg"
+    android:padding="10dp"
     android:layout_height="match_parent"
     tools:context="Fragments.LoginFragment">
-
 
     <ScrollView
         android:id="@+id/login_form"
@@ -13,8 +12,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_marginTop="120dp"
-
+            android:layout_marginTop="50dp"
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,7 +28,9 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
                     android:padding="3dp"
-                    android:inputType="phone"
+                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionNext"
+                    android:text="tora1@gmail.com"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -46,17 +46,17 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
                     android:padding="3dp"
-                    android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
+                    android:imeOptions="actionDone"
                     android:inputType="textPassword"
+                    android:text="luthando1"
                     android:maxLines="1"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
             <ProgressBar
                 android:id="@+id/progressBar1"
-                style="?android:attr/progressBarStyleLarge"
+                style="?android:attr/progressBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:visibility="gone"
                 android:layout_height="wrap_content" />
