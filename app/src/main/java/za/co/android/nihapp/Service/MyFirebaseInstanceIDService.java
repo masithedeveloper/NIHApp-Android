@@ -1,4 +1,4 @@
-package za.co.android.nihapp.service;
+package za.co.android.nihapp.Service;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -12,16 +12,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import za.co.android.nihapp.Model.DeviceModel;
-import za.co.android.nihapp.app.Config;
+import za.co.android.nihapp.Common.Config;
 
-import static za.co.android.nihapp.app.Config.DEVICE_URL;
+import static za.co.android.nihapp.Common.Config.DEVICE_URL;
 
 /**
  * Created by Masi on 14-Jan-18.

@@ -88,4 +88,9 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="bill_summary">Bill Summary</string>
+    <string name="number_of_trips">Number of trips</string>
+    <string name="rate_per_trip">Rate per trip</string>
+    <string name="amount_to_be_paid">Amount to be paid</string>
+    <string name="view_messages">View Messages</string>
 </resources>

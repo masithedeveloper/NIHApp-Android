@@ -14,13 +14,14 @@
         android:protectionLevel="signature" />
 
     <application
+        android:name=".Common.NIHApplication"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.LoginActivity">
+        <activity android:name=".Activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,20 +29,25 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".Activities.LoginActivity">
+        </activity>
+
         <!-- Firebase Notifications -->
-        <service android:name=".service.MyFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".service.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
+        <!--<service android:name=".Service.MyFirebaseMessagingService">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
+        <!--<service android:name=".Service.MyFirebaseInstanceIDService">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
         <!-- ./Firebase Notifications -->
 
-        <activity android:name=".Activities.EventActivity"></activity>
+        <activity android:name=".Activities.EventActivity" />
+        <activity android:name=".Activities.BillSummaryActivity" />
+
     </application>
 
 </manifest>

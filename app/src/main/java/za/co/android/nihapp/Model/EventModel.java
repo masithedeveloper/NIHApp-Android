@@ -3,7 +3,7 @@ package za.co.android.nihapp.Model;
 public class EventModel {
     public long EvtID;
     public long EvtParentId;
-    public long EvtDrivertId;
+    public long EvtDriverId;
     public String EvtPickUpTime;
     public String EvtDropOffTime;
     public boolean EvtTripFromHome;
@@ -14,10 +14,10 @@ public class EventModel {
     public EventModel() {
     }
 
-    public EventModel(long evtID, long evtParentId, long evtDrivertId, String evtPickUpTime, String evtDropOffTime, boolean evtTripFromHome, String evtType, String evtLongitude, String evtLatitude) {
+    public EventModel(long evtID, long evtParentId, long evtDriverId, String evtPickUpTime, String evtDropOffTime, boolean evtTripFromHome, String evtType, String evtLongitude, String evtLatitude) {
         EvtID = evtID;
         EvtParentId = evtParentId;
-        EvtDrivertId = evtDrivertId;
+        EvtDriverId = evtDriverId;
         EvtPickUpTime = evtPickUpTime;
         EvtDropOffTime = evtDropOffTime;
         EvtTripFromHome = evtTripFromHome;
@@ -42,12 +42,12 @@ public class EventModel {
         EvtParentId = evtParentId;
     }
 
-    public long getEvtDrivertId() {
-        return EvtDrivertId;
+    public long getEvtDriverId() {
+        return EvtDriverId;
     }
 
-    public void setEvtDrivertId(long evtDrivertId) {
-        EvtDrivertId = evtDrivertId;
+    public void setEvtDriverId(long evtDriverId) {
+        EvtDriverId = evtDriverId;
     }
 
     public String getEvtPickUpTime() {
@@ -101,17 +101,10 @@ public class EventModel {
     public boolean validate(){
         if(EvtParentId == 0)
             return false;
-        if(EvtDrivertId == 0)
+        if(EvtDriverId == 0)
             return false;
-        if(EvtPickUpTime.length() == 0)
+        if(EvtType.length() == 0)
             return false;
-        if(EvtDropOffTime.length() == 0)
-            return false;
-        if(EvtLongitude.length() == 0)
-            return false;
-        if(EvtLatitude.length() == 0)
-            return false;
-
         return true;
     }
 }

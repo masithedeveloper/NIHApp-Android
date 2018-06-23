@@ -1,82 +1,82 @@
 package za.co.android.nihapp.Activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import za.co.android.nihapp.Adapters.ParentsSpinnerAdapter;
+import za.co.android.nihapp.Interfaces.IParentSpinner;
+import za.co.android.nihapp.Model.AuthModelLight;
 import za.co.android.nihapp.Model.EventModel;
 import za.co.android.nihapp.Model.PersonModel;
 import za.co.android.nihapp.R;
+import za.co.android.nihapp.Common.Config;
+import za.co.android.nihapp.Common.NIHApplication;
+import za.co.android.nihapp.Common.SharedPreferencesHandler;
 
 import static android.widget.Toast.makeText;
 import static java.lang.String.valueOf;
-import static za.co.android.nihapp.app.Config.EVENT_URL;
+import static za.co.android.nihapp.Common.Config.EVENT_URL;
 
 public class EventActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     ProgressBar mProgressBar;
     EventModel eventModel = new EventModel();
     Spinner list_of_parents_spinner;
-    RadioButton pick_up_radio;
-    RadioButton drop_off_radio;
+    RadioButton selectedEventType;
+    RadioGroup event_type_group;
     Switch from_home_switch;
     Button send_event_button;
     Long PersonId = 0L;
     String SessionKey;
-    ArrayList<PersonModel> parents = null;
-    ArrayAdapter<PersonModel> personModelArrayAdapter;
+    ArrayList<IParentSpinner> parents = new ArrayList<>();
+    private boolean isClicked = false;
+    IParentSpinner selectedParent = new PersonModel();
 
     //----------------------------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
-        SharedPreferences sp = getSharedPreferences("myPref", Context.MODE_PRIVATE);
-        PersonId = sp.getLong("PersonId", 0);
-        SessionKey = sp.getString("SessionKey", "");
+        AuthModelLight loggedInPersonModel = SharedPreferencesHandler.getPersonModel(this);
+        PersonId = loggedInPersonModel.getPersonId();
+        SessionKey = loggedInPersonModel.getSessionKey();
         mProgressBar = findViewById(R.id.progressBar1);
         list_of_parents_spinner = findViewById(R.id.list_of_parents_spinner);
-        pick_up_radio = findViewById(R.id.pick_up_radio);
-        drop_off_radio = findViewById(R.id.drop_off_radio);
+        event_type_group = findViewById(R.id.event_type_group);
         from_home_switch = findViewById(R.id.from_home_switch);
         send_event_button = findViewById(R.id.send_event_button);
         getParents();
@@ -84,8 +84,8 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
         send_event_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bindUIDataToModel();
-                if(eventModel.validate())
+                selectedEventType = findViewById(event_type_group.getCheckedRadioButtonId());
+                if(bindUIDataToModel() && eventModel.validate())
                     sendEvent();
                 else
                     Toast.makeText(getApplicationContext(), "Fill in all required fields", Toast.LENGTH_SHORT).show();
@@ -94,112 +94,48 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     //----------------------------------------------------------------------------------------------
-    void bindUIDataToModel(){
-        eventModel.setEvtParentId(4);
-        eventModel.setEvtDrivertId(PersonId);
-        eventModel.setEvtPickUpTime("018-06-11T22:39:26");
-        eventModel.setEvtDropOffTime("018-06-11T22:39:26");
-        eventModel.setEvtLongitude("73.564097");
-        eventModel.setEvtLatitude("73.564097");
+    private boolean bindUIDataToModel(){ // called on send event
+        boolean isValid = false;
+        eventModel.setEvtDriverId(PersonId);
+        if(selectedEventType != null) {
+            isValid = true;
+            if (selectedEventType.getId() == R.id.pick_up_radio)
+                eventModel.setEvtType("PickUp");
+            else
+                eventModel.setEvtType("DropOff");
+        }
+        eventModel.setEvtTripFromHome(from_home_switch.isChecked());
+        eventModel.setEvtLongitude("73.564097"); // can be null
+        eventModel.setEvtLatitude("73.564097"); // can be null
+        return isValid;
     }
+
     //----------------------------------------------------------------------------------------------
     private void getParents(){
-        JsonArrayRequest request = new JsonArrayRequest("http://10.0.92.134:8089/api/person?driverId=6",
+        JsonArrayRequest request = new JsonArrayRequest(Config.GET_PARENTS_URL + PersonId,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("Response", response.toString());
-                        Type listType = new TypeToken<ArrayList<PersonModel>>(){}.getType();
-                        parents = new Gson().fromJson(response.toString(), listType);
-                        if(parents.size() > 0)
-                            configureParentsSpinner(parents);
-                        //else
-                            // show some dialog and do not proceed
-
+                        if(response.length() > 0) {
+                            TypeToken typeToken = new TypeToken<ArrayList<PersonModel>>(){};
+                            PersonModel personModel = new PersonModel();
+                            personModel.setPerFullname("Select child's parent... *");
+                            parents.clear();
+                            parents.add(0, personModel);
+                            parents.addAll((Collection<? extends IParentSpinner>) new Gson().fromJson(response.toString(), typeToken.getType()));
+                            configureParentsSpinner();
+                        }
+                        else
+                            list_of_parents_spinner.setEnabled(false); // maybe show text message next to the view
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("Error", "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+                Toast.makeText(getApplicationContext(), "Could not get parents", Toast.LENGTH_SHORT).show();
+            } //0637361513
         })
-        /*{
-
-            @Override
-            public Map<String,String> getHeaders(){
-                HashMap<String,String> headers = new HashMap();
-                headers.put("Content-Type", "application/json");
-                headers.put("XClientId", Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID));
-                headers.put("PersonId", valueOf(PersonId));
-                headers.put("XSessionId", valueOf(SessionKey));
-                headers.put("F748AE85-9AC5-46A9-B1F7-E76390BB3A85", "masi");
-                headers.put("xerxes=1", "masi");
-                return headers;
-            }
-        }*/;
-
-        // Adding request to request queue
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(request);
-    }
-
-    private void configureParentsSpinner(ArrayList<PersonModel> parents) {
-        personModelArrayAdapter = new ArrayAdapter<>(this,  R.layout.support_simple_spinner_dropdown_item, parents);
-        list_of_parents_spinner.setAdapter(personModelArrayAdapter);
-        list_of_parents_spinner.setOnItemSelectedListener(this);
-    }
-    //----------------------------------------------------------------------------------------------
-    private void sendEvent() {
-        Gson gson = new Gson();
-        String _json = gson.toJson(eventModel);
-        JSONObject json = null;
-        try {
-            json = new JSONObject(_json);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, EVENT_URL, json, new Response.Listener<JSONObject>() {
-            //------------------------------------------------------------------------------
-            @Override
-            public void onResponse(JSONObject response) {
-                mProgressBar.setVisibility(View.GONE);
-                try {
-                    if(response.getString("EvtID") != null &&  response.getInt("EvtID") != 0) {
-                        makeText(EventActivity.this, "Event send", Toast.LENGTH_SHORT).show();
-                        //
-                        eventModel = new EventModel();
-                    }else{
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(),R.style.MyAlertDialogStyle);
-                        builder.setMessage(response.get("Desc").toString()) //temp
-                                .setTitle("Error!")
-                                .setPositiveButton(android.R.string.ok, null);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            //------------------------------------------------------------------------------
-        },new Response.ErrorListener() {
-            //----------------------------------------------------------------------------------
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                mProgressBar.setVisibility(View.GONE);
-                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(),R.style.MyAlertDialogStyle);
-                builder.setMessage(error.toString()) //temp
-                        .setTitle("Error!")
-                        .setPositiveButton(android.R.string.ok, null);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-            //----------------------------------------------------------------------------------
-        })
-
         {
-            /** Passing some request headers* */
             @Override
             public Map<String,String> getHeaders(){
                 HashMap<String,String> headers = new HashMap();
@@ -207,29 +143,136 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
                 headers.put("XClientId", Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID));
                 headers.put("PersonId", valueOf(PersonId));
                 headers.put("XSessionId", valueOf(SessionKey));
-                headers.put("F748AE85-9AC5-46A9-B1F7-E76390BB3A85", "masi");
-                headers.put("xerxes=1", "masi");
                 return headers;
             }
         };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(jsonObjectRequest);
-        mProgressBar.setVisibility(View.VISIBLE);
+        // Adding request to request queue
+        NIHApplication.getRequestQueueInstance().add(request);
     }
 
+    //----------------------------------------------------------------------------------------------
+    private void configureParentsSpinner() {
+        final ParentsSpinnerAdapter personModelArrayAdapter = new ParentsSpinnerAdapter(this, R.layout.layout_parent_spinner, parents){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0){
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        if(list_of_parents_spinner != null){
+            list_of_parents_spinner.setAdapter(personModelArrayAdapter);
+        }
+        list_of_parents_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                IParentSpinner current = (IParentSpinner) parent.getItemAtPosition(position);
+                if(current != null){
+                    selectedParent = current;
+                    eventModel.setEvtParentId(current.GetID());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    //----------------------------------------------------------------------------------------------
+    private void sendEvent() {
+        try {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, EVENT_URL, new JSONObject(new Gson().toJson(eventModel)), new Response.Listener<JSONObject>() {
+                //------------------------------------------------------------------------------
+                @Override
+                public void onResponse(JSONObject response) {
+                    mProgressBar.setVisibility(View.GONE);
+                    try {
+                        eventModel = new Gson().fromJson(response.toString(), EventModel.class);
+                        if(eventModel != null && eventModel.getEvtID() != 0) {
+                            String eventMessage = "A " + eventModel.getEvtType().toLowerCase() + " notification has been sent"; // to " + selectedParent.GetDisplay();
+                            makeText(EventActivity.this, eventMessage, Toast.LENGTH_SHORT).show();
+                            eventModel = new EventModel();  // reset thing
+                            startActivity(getIntent());
+                            finish();
+                        }
+                        else{
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(),R.style.MyAlertDialogStyle);
+                            builder.setMessage("Tsek your shit") //temp
+                                    .setTitle("Error!")
+                                    .setPositiveButton(android.R.string.ok, null);
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                //----------------------------------------------------------------------------------
+            },new Response.ErrorListener() {
+                //----------------------------------------------------------------------------------
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    mProgressBar.setVisibility(View.GONE);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(),R.style.MyAlertDialogStyle);
+                    builder.setMessage(error.toString()) //temp
+                            .setTitle("Error!")
+                            .setPositiveButton(android.R.string.ok, null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+                //----------------------------------------------------------------------------------
+            }){
+                @Override
+                public Map<String,String> getHeaders(){ // THINKING OF STORING THIS ON SHAREDPREF AND JUST RETRIEVE IT EACH TIME
+                    HashMap<String,String> headers = new HashMap();
+                    headers.put("Content-Type", "application/json");
+                    headers.put("XClientId", Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID));
+                    headers.put("PersonId", valueOf(PersonId));
+                    headers.put("XSessionId", valueOf(SessionKey));
+                    return headers;
+                }
+            };
+
+            NIHApplication.getRequestQueueInstance().add(jsonObjectRequest);
+            mProgressBar.setVisibility(View.VISIBLE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //if(view.getId() == R.id.text){
-        eventModel.setEvtParentId(((PersonModel)parent.getSelectedItem()).getPerId());
-        //}
-        // else if view id is event type
-        Toast.makeText(this, ((PersonModel)parent.getSelectedItem()).getPerFirstname(), Toast.LENGTH_SHORT).show();
+        if(isClicked) {
+            eventModel.setEvtParentId(((PersonModel) parent.getSelectedItem()).getPerId());
+            Toast.makeText(this, ((PersonModel) parent.getSelectedItem()).getPerFirstname(), Toast.LENGTH_SHORT).show();
+        }
+        isClicked = true;
     }
 
+    //----------------------------------------------------------------------------------------------
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
     //----------------------------------------------------------------------------------------------
 }

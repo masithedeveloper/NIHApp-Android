@@ -1,6 +1,8 @@
 package za.co.android.nihapp.Model;
 
-public class PersonModel {
+import za.co.android.nihapp.Interfaces.IParentSpinner;
+
+public class PersonModel implements IParentSpinner {
     public long PerId;
     public String PerFirstname;
     public String PerLastname;
@@ -10,7 +12,8 @@ public class PersonModel {
     public String PerIdNumber ;
     public String PerPassword;
     public String PerHashPassword;
-    public boolean PerPasswordReset ;
+    public boolean PerPasswordReset;
+    public boolean PerType;
     public short PerLockCount ;
     public String PerLockedAt;
     public short PerAccessType ;
@@ -67,7 +70,7 @@ public class PersonModel {
     }
 
     public String getPerFullname() {
-        return PerFullname;
+        return PerFirstname + " " +  PerLastname ;
     }
 
     public void setPerFullname(String perFullname) {
@@ -176,5 +179,23 @@ public class PersonModel {
 
     public void setPerCellPhone(String perCellPhone) {
         PerCellPhone = perCellPhone;
+    }
+
+    public boolean isPerType() {
+        return PerType;
+    }
+
+    public void setPerType(boolean perType) {
+        PerType = perType;
+    }
+
+    @Override
+    public String GetDisplay() {
+        return PerFullname;
+    }
+
+    @Override
+    public long GetID() {
+        return getPerId();
     }
 }

@@ -2,12 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg"
     android:orientation="vertical"
     tools:context="Fragments.SignupFragment">
 
     <ScrollView
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
         android:padding="2dp"
         android:id="@+id/login_form"
         android:layout_width="match_parent"
@@ -21,12 +20,14 @@
                 android:layout_height="wrap_content"
                 android:hint="FirstName"
                 android:textColor="#fff"
+                android:imeOptions="actionNext"
                 android:textColorHint="#fff"
                 android:id="@+id/firstName"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="LastName"
+                android:imeOptions="actionNext"
                 android:textColor="#fff"
                 android:textColorHint="#fff"
                 android:id="@+id/lastName"/>
@@ -35,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Email Address"
                 android:textColor="#fff"
+                android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:textColorHint="#fff"
                 android:id="@+id/email"/>
@@ -43,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Password"
                 android:textColor="#fff"
+                android:imeOptions="actionDone"
                 android:textColorHint="#fff"
                 android:id="@+id/password"/>
             <RadioGroup
@@ -57,14 +60,14 @@
                     android:textStyle="italic"
                     android:text="Parent"
                     android:textColor="#fff"
-                    android:id="@+id/radBtn1"/>
+                    android:id="@+id/parent_radio_button"/>
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Driver"
                     android:textColor="#fff"
                     android:textStyle="italic"
-                    android:id="@+id/radBtn2"/>
+                    android:id="@+id/driver_radio_button"/>
             </RadioGroup>
             <ProgressBar
                 android:id="@+id/progressBar2"

@@ -1,8 +1,7 @@
-package za.co.android.nihapp.service;
+package za.co.android.nihapp.Service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -13,8 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import za.co.android.nihapp.Activities.LoginActivity;
-import za.co.android.nihapp.app.Config;
-import za.co.android.nihapp.utils.NotificationUtils;
+import za.co.android.nihapp.Utils.NotificationUtils;
 
 
 /**
@@ -57,9 +55,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void handleNotification(String message) {
         if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
             // app is in foreground, broadcast the push message
-            Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-            pushNotification.putExtra("message", message);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+             // UNCOMMENT THIS
+            //Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+            //pushNotification.putExtra("message", message);
+            //LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
             // play notification sound
             NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
@@ -93,9 +92,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
                 // app is in foreground, broadcast the push message
-                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-                pushNotification.putExtra("message", message);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+                //Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+                //pushNotification.putExtra("message", message);
+                //LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
                 // play notification sound
                 NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());

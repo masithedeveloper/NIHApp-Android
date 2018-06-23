@@ -1,4 +1,4 @@
-package za.co.android.nihapp.utils;
+package za.co.android.nihapp.Utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import za.co.android.nihapp.R;
-import za.co.android.nihapp.app.Config;
+import za.co.android.nihapp.Common.Config;
 
 
 /**
