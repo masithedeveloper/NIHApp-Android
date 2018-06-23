@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_height="wrap_content"
-            android:text="10" />
+            android:text="-" />
 
         <!-- Rate per trip -->
 
@@ -63,7 +63,7 @@
             android:id="@+id/rate_per_trips_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20" />
+            android:text="-" />
 
         <!-- Bill amount -->
 
@@ -84,7 +84,7 @@
             android:id="@+id/bill_amount_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="20" />
+            android:text="-" />
 
         <!-- where -->
         <ProgressBar

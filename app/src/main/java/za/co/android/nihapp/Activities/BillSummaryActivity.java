@@ -103,9 +103,9 @@ public class BillSummaryActivity extends AppCompatActivity{
 
     //----------------------------------------------------------------------------------------------
     private void displaySummary() {
-        //number_of_trips.setText(billSummaryModel.getNumberOfTrips());
-        //rate_per_trip.setText(Utils.formatMoney(String.valueOf(billSummaryModel.getRatePerTrip())));
-        //bill_amount.setText(Utils.formatMoney(String.valueOf(billSummaryModel.getTotalCost())));
+        number_of_trips.setText(String.valueOf(billSummaryModel.getNumberOfTrips()));
+        rate_per_trip.setText(Utils.formatMoney(String.valueOf(billSummaryModel.getRatePerTrip())));
+        bill_amount.setText(Utils.formatMoney(String.valueOf(billSummaryModel.getTotalCost())));
     }
 
     //----------------------------------------------------------------------------------------------
