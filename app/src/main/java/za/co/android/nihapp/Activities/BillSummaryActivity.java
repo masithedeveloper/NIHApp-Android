@@ -1,8 +1,13 @@
 package za.co.android.nihapp.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -39,12 +44,41 @@ public class BillSummaryActivity extends AppCompatActivity{
     String SessionKey;
     TextView number_of_trips, rate_per_trip, bill_amount;
     Button view_messages_button;
+    private DrawerLayout mDrawerLayout;
 
     //----------------------------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bill_summary);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        //Toolbar toolbar = findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        switch (menuItem.getItemId()){
+                            case R.id.logout:
+                                SharedPreferencesHandler.removePersonModel(getApplicationContext());
+                                Toast.makeText(getApplicationContext(), "Logged out", Toast.LENGTH_LONG).show();
+                                // try navigating to login tab
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                        }
+                        return true;
+                    }
+                });
         AuthModelLight loggedInPersonModel = SharedPreferencesHandler.getPersonModel(this);
         PersonId = loggedInPersonModel.getPersonId();
         SessionKey = loggedInPersonModel.getSessionKey();

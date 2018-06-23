@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         mFragmentManager = getSupportFragmentManager();
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0358B2")));
+        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0358B2")));
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.activity_main,new loginTabAdapter()).commit();
 
