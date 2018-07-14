@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">NIH App</string>
-    <string name="prompt_email">User Id</string>
+    <string name="app_name">NiH</string>
+    <string name="prompt_email">Username</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
+    <string name="action_login">Login</string>
+    <string name="action_register">Register</string>
     <string name="prompt_spinner">Brand</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
@@ -93,4 +94,5 @@
     <string name="rate_per_trip">Rate per trip</string>
     <string name="amount_to_be_paid">Amount to be paid</string>
     <string name="view_messages">View Messages</string>
+    <string name="send_notification">Send Notification</string>
 </resources>

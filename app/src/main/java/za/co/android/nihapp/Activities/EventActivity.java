@@ -3,13 +3,15 @@ package za.co.android.nihapp.Activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.provider.Settings;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -37,7 +39,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import za.co.android.nihapp.Adapters.ParentsSpinnerAdapter;
+import za.co.android.nihapp.Adapters.PersonSpinnerAdapter;
 import za.co.android.nihapp.Interfaces.IParentSpinner;
 import za.co.android.nihapp.Model.AuthModelLight;
 import za.co.android.nihapp.Model.EventModel;
@@ -65,12 +67,41 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
     ArrayList<IParentSpinner> parents = new ArrayList<>();
     private boolean isClicked = false;
     IParentSpinner selectedParent = new PersonModel();
+    private DrawerLayout mDrawerLayout;
 
     //----------------------------------------------------------------------------------------------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        //Toolbar toolbar = findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+                        // Add code here to update the UI based on the item selected
+                        // For example, swap UI fragments here
+                        switch (menuItem.getItemId()){
+                            case R.id.logout:
+                                SharedPreferencesHandler.removePersonModel(getApplicationContext());
+                                Toast.makeText(getApplicationContext(), "Logged out", Toast.LENGTH_LONG).show();
+                                // try navigating to login tab
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                        }
+                        return true;
+                    }
+                });
         AuthModelLight loggedInPersonModel = SharedPreferencesHandler.getPersonModel(this);
         PersonId = loggedInPersonModel.getPersonId();
         SessionKey = loggedInPersonModel.getSessionKey();
@@ -119,7 +150,8 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
                         if(response.length() > 0) {
                             TypeToken typeToken = new TypeToken<ArrayList<PersonModel>>(){};
                             PersonModel personModel = new PersonModel();
-                            personModel.setPerFullname("Select child's parent... *");
+                            personModel.setPerFirstname("Select child's parent... *");
+                            personModel.setPerLastname("");
                             parents.clear();
                             parents.add(0, personModel);
                             parents.addAll((Collection<? extends IParentSpinner>) new Gson().fromJson(response.toString(), typeToken.getType()));
@@ -152,7 +184,7 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
 
     //----------------------------------------------------------------------------------------------
     private void configureParentsSpinner() {
-        final ParentsSpinnerAdapter personModelArrayAdapter = new ParentsSpinnerAdapter(this, R.layout.layout_parent_spinner, parents){
+        final PersonSpinnerAdapter personModelArrayAdapter = new PersonSpinnerAdapter(this, R.layout.layout_spinner, parents){
             @Override
             public boolean isEnabled(int position){
                 if(position == 0){
@@ -173,7 +205,7 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
                     tv.setTextColor(Color.GRAY);
                 }
                 else {
-                    tv.setTextColor(Color.BLACK);
+                    tv.setTextColor(Color.parseColor("#000000"));
                 }
                 return view;
             }

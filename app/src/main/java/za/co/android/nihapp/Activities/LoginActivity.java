@@ -1,7 +1,5 @@
 package za.co.android.nihapp.Activities;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;

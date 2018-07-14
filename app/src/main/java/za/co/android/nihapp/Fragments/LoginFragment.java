@@ -29,7 +29,6 @@ import java.util.Map;
 
 import za.co.android.nihapp.Activities.BillSummaryActivity;
 import za.co.android.nihapp.Activities.EventActivity;
-import za.co.android.nihapp.Activities.SplashActivity;
 import za.co.android.nihapp.Model.AuthModelLight;
 import za.co.android.nihapp.R;
 import za.co.android.nihapp.Common.NIHApplication;
@@ -53,8 +52,7 @@ public class LoginFragment extends Fragment {
     //----------------------------------------------------------------------------------------------
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
@@ -121,7 +119,7 @@ public class LoginFragment extends Fragment {
                             SharedPreferencesHandler.putPersonModel(getContext(), authModelLight);
                             Toast.makeText(getActivity(), authModelLight.getDesc(),Toast.LENGTH_SHORT).show();
                             // Navigate to the main screen
-                            Intent intent = null;
+                            Intent intent;
                             if(authModelLight.isPersonType()) // parent
                                 intent =  new Intent(getContext(), BillSummaryActivity.class); // offline login
                             else // driver

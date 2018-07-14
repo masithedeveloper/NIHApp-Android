@@ -65,6 +65,8 @@ public class PersonRegisterModel extends PersonModel {
             return false;
         if(OS == null && OS.length() == 0)
             return false;
+        if(PerTransportId == 0)
+            return false;
         return true;
     }
 }

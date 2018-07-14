@@ -14,12 +14,12 @@ import java.util.ArrayList;
 import za.co.android.nihapp.Interfaces.IParentSpinner;
 import za.co.android.nihapp.R;
 
-public class ParentsSpinnerAdapter extends ArrayAdapter<IParentSpinner> {
+public class PersonSpinnerAdapter extends ArrayAdapter<IParentSpinner> {
     private Context mContext;
     private int resource;
     private ArrayList<IParentSpinner> mData;
 
-    public ParentsSpinnerAdapter(Context context, int resource, ArrayList<IParentSpinner> data) {
+    public PersonSpinnerAdapter(Context context, int resource, ArrayList<IParentSpinner> data) {
         super(context, resource, data);
         this.mContext = context;
         this.mData = data;
@@ -40,7 +40,7 @@ public class ParentsSpinnerAdapter extends ArrayAdapter<IParentSpinner> {
     private View getCustomView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View mySpinner = inflater.inflate(resource, parent, false);
-        TextView text = mySpinner.findViewById(R.id.layout_parent_spinner_text);
+        TextView text = mySpinner.findViewById(R.id.layout_spinner_text);
         text.setTextColor(Color.BLACK);
         IParentSpinner currentItem = mData.get(position);
         text.setText(currentItem.GetDisplay());

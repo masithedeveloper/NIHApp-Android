@@ -1,28 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
-    android:padding="10dp"
+<!-- Use DrawerLayout as root container for activity -->
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Activities.EventActivity">
+    android:fitsSystemWindows="true">
+
+    <!-- Layout to contain contents of main body of screen (drawer will slide over this) -->
+    <FrameLayout
+        android:padding="10dp"
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--android:background="?attr/colorPrimary"-->
+        <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="Pick up and Drop-off Send Notification"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <!-- list of parent -->
 
         <Spinner
-            android:layout_marginBottom="25dp"
+            android:layout_marginTop="25dp"
             android:id="@+id/list_of_parents_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></Spinner>
         <!-- event type -->
         <RadioGroup
-            android:layout_marginBottom="25dp"
+            android:layout_marginTop="25dp"
             android:orientation="horizontal"
             android:id="@+id/event_type_group"
             android:layout_width="match_parent"
@@ -44,7 +70,8 @@
 
         <!-- where -->
         <Switch
-            android:layout_marginBottom="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="8dp"
             android:text="From home?"
             android:checked="true"
             android:id="@+id/from_home_switch"
@@ -58,19 +85,29 @@
             android:layout_width="wrap_content"
             android:visibility="gone"
             android:layout_height="wrap_content" />
-
     </LinearLayout>
 
-    <!-- send button -->
-    <Button
-        style="@style/Base.Widget.AppCompat.Button.Colored"
-        android:id="@+id/send_event_button"
-        android:text="Send Event"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        />
-</RelativeLayout>
+        <!-- send button -->
+        <Button
+            style="@style/Base.Widget.AppCompat.Button.Colored"
+            android:id="@+id/send_event_button"
+            android:text="@string/send_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+    </FrameLayout>
+
+    <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
+    <android.support.design.widget.NavigationView
+        app:menu="@menu/menu_parent"
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true" />
+
+</android.support.v4.widget.DrawerLayout>
 
 
 

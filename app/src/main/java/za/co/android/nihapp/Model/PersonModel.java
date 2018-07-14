@@ -19,7 +19,7 @@ public class PersonModel implements IParentSpinner {
     public short PerAccessType ;
     public short PerVerifyCode;
     public String PerEmailVerified;
-    public int PerTransportId ;
+    public long PerTransportId ;
     public String PerCellPhone ;
 
     public PersonModel() {
@@ -165,11 +165,11 @@ public class PersonModel implements IParentSpinner {
         PerEmailVerified = perEmailVerified;
     }
 
-    public int getPerTransportId() {
+    public long getPerTransportId() {
         return PerTransportId;
     }
 
-    public void setPerTransportId(int perTransportId) {
+    public void setPerTransportId(long perTransportId) {
         PerTransportId = perTransportId;
     }
 
@@ -191,7 +191,7 @@ public class PersonModel implements IParentSpinner {
 
     @Override
     public String GetDisplay() {
-        return PerFullname;
+        return getPerFullname();
     }
 
     @Override
