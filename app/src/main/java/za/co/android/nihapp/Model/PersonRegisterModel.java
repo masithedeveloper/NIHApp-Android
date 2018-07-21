@@ -1,6 +1,9 @@
 package za.co.android.nihapp.Model;
 
-public class PersonRegisterModel extends PersonModel {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class PersonRegisterModel extends PersonModel implements Parcelable {
     private String Password;
     private String EmailAddress;
     private String DeviceCode;
@@ -65,8 +68,19 @@ public class PersonRegisterModel extends PersonModel {
             return false;
         if(OS == null && OS.length() == 0)
             return false;
-        if(PerTransportId == 0)
+        //if(PerType) // if person type is parent then validate driver selection
+        if(PerType && PerTransportId == 0) // if first condition evaluation is false then the compiler does not evaluate the second condition
             return false;
         return true;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        
     }
 }

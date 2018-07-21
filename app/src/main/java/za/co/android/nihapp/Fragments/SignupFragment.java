@@ -148,48 +148,7 @@ public class SignupFragment extends Fragment implements AdapterView.OnItemSelect
                 }
             }
         });
-        getDrivers();
-    }
-
-    //----------------------------------------------------------------------------------------------
-    private void getDrivers(){
-        JsonArrayRequest request = new JsonArrayRequest(Config.GET_DRIVERS_URL,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        if(response.length() > 0) {
-                            TypeToken typeToken = new TypeToken<ArrayList<PersonModel>>(){};
-                            PersonModel personModel = new PersonModel();
-                            personModel.setPerFirstname("Select driver... *");
-                            personModel.setPerLastname("");
-                            drivers.clear();
-                            drivers.add(0, personModel);
-                            drivers.addAll((Collection<? extends IParentSpinner>) new Gson().fromJson(response.toString(), typeToken.getType()));
-                            configureDriversSpinner();
-                        }
-                        else
-                            list_of_drivers_spinner.setEnabled(false); // maybe show text message next to the view
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Error", "Error: " + error.getMessage());
-                Toast.makeText(getActivity().getApplicationContext(), "Could not get drivers", Toast.LENGTH_SHORT).show();
-            } //0637361513
-        })
-        {
-            @Override
-            public Map<String,String> getHeaders(){
-                HashMap<String,String> headers = new HashMap();
-                headers.put("Content-Type", "application/json");
-                headers.put("XClientId", Settings.Secure.getString(getActivity().getApplication().getContentResolver(), Settings.Secure.ANDROID_ID));
-                //headers.put("PersonId", valueOf(PersonId));
-                //headers.put("XSessionId", valueOf(""));
-                return headers;
-            }
-        };
-        // Adding request to request queue
-        NIHApplication.getRequestQueueInstance().add(request);
+        configureDriversSpinner();
     }
 
     //----------------------------------------------------------------------------------------------
