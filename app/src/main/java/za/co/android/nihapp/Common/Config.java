@@ -6,7 +6,8 @@ package za.co.android.nihapp.Common;
 
 public class Config {
     //public static final String BASE_URL = "http://10.0.92.134:8089/"; //work wifi
-    //public static final String BASE_URL = "http://192.168.68.1:8089/"; // mine at home
+    //public static final String BASE_URL = "http://10.0.92.27:8089/api/"; // work Ethernet
+    //public static final String BASE_URL = "http://192.168.68.1:8089/api/"; // mine at home
     //public static final String BASE_URL = "http://192.168.8.104:8089/"; // Phalyst wifi
     public static final String BASE_URL = "http://www.nihapp.co.za/api/"; // production
     public static final String REGISTER_URL = BASE_URL + "Auth";

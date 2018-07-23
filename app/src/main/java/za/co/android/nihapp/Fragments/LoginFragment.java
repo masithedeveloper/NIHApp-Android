@@ -115,7 +115,7 @@ public class LoginFragment extends Fragment {
                     mProgressBar.setVisibility(View.GONE);
                     try {
                         authModelLight = new Gson().fromJson(response.toString(), AuthModelLight.class);
-                        if(authModelLight != null && authModelLight.getPersonId() != 0 && authModelLight.getSessionKey() != null){
+                        if(authModelLight != null && authModelLight.getPersonId() != 0){ //&& authModelLight.getSessionKey() != null){
                             SharedPreferencesHandler.putPersonModel(getContext(), authModelLight);
                             Toast.makeText(getActivity(), authModelLight.getDesc(),Toast.LENGTH_SHORT).show();
                             // Navigate to the main screen

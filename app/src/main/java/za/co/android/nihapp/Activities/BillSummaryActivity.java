@@ -34,6 +34,7 @@ import za.co.android.nihapp.Utils.Utils;
 
 import static java.lang.String.valueOf;
 import static za.co.android.nihapp.Common.Config.GET_PARENT_BILL_URL;
+import static za.co.android.nihapp.Common.SharedPreferencesHandler.getPersonModel;
 
 public class BillSummaryActivity extends AppCompatActivity{
 
@@ -78,9 +79,9 @@ public class BillSummaryActivity extends AppCompatActivity{
                         return true;
                     }
                 });
-        AuthModelLight loggedInPersonModel = SharedPreferencesHandler.getPersonModel(this);
+        AuthModelLight loggedInPersonModel = getPersonModel(this);
         PersonId = loggedInPersonModel.getPersonId();
-        SessionKey = loggedInPersonModel.getSessionKey();
+        //SessionKey = loggedInPersonModel.getSessionKey();
         mProgressBar = findViewById(R.id.progressBar1);
         number_of_trips = findViewById(R.id.number_of_trips_value);
         rate_per_trip = findViewById(R.id.rate_per_trips_value);
@@ -126,7 +127,7 @@ public class BillSummaryActivity extends AppCompatActivity{
                 headers.put("Content-Type", "application/json");
                 headers.put("XClientId", Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID));
                 headers.put("PersonId", valueOf(PersonId));
-                headers.put("XSessionId", valueOf(SessionKey));
+                //headers.put("XSessionId", valueOf(SessionKey));
                 return headers;
             }
         };

@@ -52,6 +52,7 @@ import za.co.android.nihapp.Common.NIHApplication;
 
 import static android.text.TextUtils.isEmpty;
 import static java.lang.String.valueOf;
+import static za.co.android.nihapp.Activities.LoginActivity.getDrivers;
 import static za.co.android.nihapp.Common.Config.REGISTER_URL;
 
 
@@ -70,7 +71,6 @@ public class SignupFragment extends Fragment implements AdapterView.OnItemSelect
     String FirstName, LastName, CellPhone, EmailAddress, Password;
     PersonRegisterModel personRegisterModel = new PersonRegisterModel();
     Context con;
-    ArrayList<IParentSpinner> drivers = new ArrayList<>();
     private boolean isClicked = false;
     IParentSpinner selectedDriver = new PersonModel();
 
@@ -153,7 +153,7 @@ public class SignupFragment extends Fragment implements AdapterView.OnItemSelect
 
     //----------------------------------------------------------------------------------------------
     private void configureDriversSpinner() {
-        final PersonSpinnerAdapter personModelArrayAdapter = new PersonSpinnerAdapter(getActivity(), R.layout.layout_spinner, drivers){
+        final PersonSpinnerAdapter personModelArrayAdapter = new PersonSpinnerAdapter(getActivity(), R.layout.layout_spinner, getDrivers()){
             @Override
             public boolean isEnabled(int position){
                 if(position == 0){
@@ -179,7 +179,7 @@ public class SignupFragment extends Fragment implements AdapterView.OnItemSelect
                 return view;
             }
         };
-        if(list_of_drivers_spinner != null){
+        if(list_of_drivers_spinner != null && getDrivers() != null){
             list_of_drivers_spinner.setAdapter(personModelArrayAdapter);
         }
         list_of_drivers_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

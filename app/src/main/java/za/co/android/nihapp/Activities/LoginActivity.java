@@ -8,12 +8,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 
+import java.util.ArrayList;
+
 import za.co.android.nihapp.Adapters.loginTabAdapter;
+import za.co.android.nihapp.Interfaces.IParentSpinner;
 import za.co.android.nihapp.R;
 
 public class LoginActivity extends AppCompatActivity {
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
+    public static ArrayList<IParentSpinner> drivers = new ArrayList<>();
 
     //----------------------------------------------------------------------------------------------
     @Override
@@ -29,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
             // Hide the status bar
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
-
+        drivers = (ArrayList<IParentSpinner>) getIntent().getSerializableExtra("Drivers");
         mFragmentManager = getSupportFragmentManager();
         //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0358B2")));
         mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -51,5 +55,11 @@ public class LoginActivity extends AppCompatActivity {
         }).start();
         */
     }
+    //----------------------------------------------------------------------------------------------
+
+    public static ArrayList<IParentSpinner> getDrivers() {
+        return drivers;
+    }
+
     //----------------------------------------------------------------------------------------------
 }

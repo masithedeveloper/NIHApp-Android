@@ -53,7 +53,7 @@ public class SplashActivity extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
 
-        NIHApplication nihApplication = new NIHApplication();
+        //NIHApplication nihApplication = new NIHApplication();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -74,11 +74,12 @@ public class SplashActivity extends AppCompatActivity {
 
     //----------------------------------------------------------------------------------------------
     private void getDrivers(){
-        JsonArrayRequest request = new JsonArrayRequest(Config.GET_DRIVERS_URL,
+        String get_drivers_url = Config.GET_DRIVERS_URL;
+        JsonArrayRequest request = new JsonArrayRequest(get_drivers_url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) { // is this running on the UIThread?
-                        if(response.length() > 0) {
+                        //if(response.length() > 0) {
                             TypeToken typeToken = new TypeToken<ArrayList<PersonModel>>(){};
                             PersonModel personModel = new PersonModel();
                             personModel.setPerFirstname("Select driver... *");
@@ -88,7 +89,7 @@ public class SplashActivity extends AppCompatActivity {
                             drivers.addAll((Collection<? extends IParentSpinner>) new Gson().fromJson(response.toString(), typeToken.getType()));
                             startActivity(new Intent(SplashActivity.this, LoginActivity.class).putExtra("Drivers", drivers)); // online login
                             finish(); // finish splash
-                        }
+                        //}
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -96,7 +97,7 @@ public class SplashActivity extends AppCompatActivity {
                 VolleyLog.d("Error", "Error: " + error.getMessage());
                 Log.d("Error", "Error: " + error.getMessage());
                 if (retries != 3) { // allow 2 retries
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(), R.style.MyAlertDialogStyle);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext(), R.style.MyAlertDialogStyle);
                     builder.setMessage(error.getMessage())
                             .setTitle("Network error")
                             .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
@@ -107,10 +108,14 @@ public class SplashActivity extends AppCompatActivity {
                                 }
                             })
                             .setNegativeButton("Exit app", null); // close the app
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                    Toast.makeText(getApplicationContext(), "Could not get drivers", Toast.LENGTH_SHORT).show();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog dialog = builder.create();
+                            //dialog.show();
+                            Toast.makeText(getApplicationContext(), "Could not get drivers", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         })

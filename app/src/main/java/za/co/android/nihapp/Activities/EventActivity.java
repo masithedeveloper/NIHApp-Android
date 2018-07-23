@@ -104,7 +104,7 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
                 });
         AuthModelLight loggedInPersonModel = SharedPreferencesHandler.getPersonModel(this);
         PersonId = loggedInPersonModel.getPersonId();
-        SessionKey = loggedInPersonModel.getSessionKey();
+        //SessionKey = loggedInPersonModel.getSessionKey();
         mProgressBar = findViewById(R.id.progressBar1);
         list_of_parents_spinner = findViewById(R.id.list_of_parents_spinner);
         event_type_group = findViewById(R.id.event_type_group);
@@ -174,7 +174,7 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
                 headers.put("Content-Type", "application/json");
                 headers.put("XClientId", Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID));
                 headers.put("PersonId", valueOf(PersonId));
-                headers.put("XSessionId", valueOf(SessionKey));
+                //headers.put("XSessionId", valueOf(SessionKey));
                 return headers;
             }
         };
@@ -280,7 +280,7 @@ public class EventActivity extends AppCompatActivity implements AdapterView.OnIt
                     headers.put("Content-Type", "application/json");
                     headers.put("XClientId", Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID));
                     headers.put("PersonId", valueOf(PersonId));
-                    headers.put("XSessionId", valueOf(SessionKey));
+                    //headers.put("XSessionId", valueOf(SessionKey));
                     return headers;
                 }
             };

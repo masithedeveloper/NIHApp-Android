@@ -1,8 +1,11 @@
 package za.co.android.nihapp.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import za.co.android.nihapp.Interfaces.IParentSpinner;
 
-public class PersonModel implements IParentSpinner {
+public class PersonModel implements IParentSpinner, Parcelable{
     public long PerId;
     public String PerFirstname;
     public String PerLastname;
@@ -44,6 +47,39 @@ public class PersonModel implements IParentSpinner {
         PerTransportId = perTransportId;
         PerCellPhone = perCellPhone;
     }
+
+    protected PersonModel(Parcel in) {
+        PerId = in.readLong();
+        PerFirstname = in.readString();
+        PerLastname = in.readString();
+        PerFullname = in.readString();
+        PerEmail = in.readString();
+        PerDob = in.readString();
+        PerIdNumber = in.readString();
+        PerPassword = in.readString();
+        PerHashPassword = in.readString();
+        PerPasswordReset = in.readByte() != 0;
+        PerType = in.readByte() != 0;
+        PerLockCount = (short) in.readInt();
+        PerLockedAt = in.readString();
+        PerAccessType = (short) in.readInt();
+        PerVerifyCode = (short) in.readInt();
+        PerEmailVerified = in.readString();
+        PerTransportId = in.readLong();
+        PerCellPhone = in.readString();
+    }
+
+    public static final Creator<PersonModel> CREATOR = new Creator<PersonModel>() {
+        @Override
+        public PersonModel createFromParcel(Parcel in) {
+            return new PersonModel(in);
+        }
+
+        @Override
+        public PersonModel[] newArray(int size) {
+            return new PersonModel[size];
+        }
+    };
 
     public long getPerId() {
         return PerId;
@@ -197,5 +233,32 @@ public class PersonModel implements IParentSpinner {
     @Override
     public long GetID() {
         return getPerId();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(PerId);
+        dest.writeString(PerFirstname);
+        dest.writeString(PerLastname);
+        dest.writeString(PerFullname);
+        dest.writeString(PerEmail);
+        dest.writeString(PerDob);
+        dest.writeString(PerIdNumber);
+        dest.writeString(PerPassword);
+        dest.writeString(PerHashPassword);
+        dest.writeByte((byte) (PerPasswordReset ? 1 : 0));
+        dest.writeByte((byte) (PerType ? 1 : 0));
+        dest.writeInt((int) PerLockCount);
+        dest.writeString(PerLockedAt);
+        dest.writeInt((int) PerAccessType);
+        dest.writeInt((int) PerVerifyCode);
+        dest.writeString(PerEmailVerified);
+        dest.writeLong(PerTransportId);
+        dest.writeString(PerCellPhone);
     }
 }

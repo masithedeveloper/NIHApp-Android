@@ -75,6 +75,7 @@
                         android:imeOptions="actionNext"
                         android:padding="3dp"
                         android:maxLines="1"
+                        android:maxLength="10"
                         android:inputType="phone"
                         android:singleLine="true"
                         android:id="@+id/cellPhone"/>
